@@ -1,12 +1,12 @@
-name: Steps Examples
+name: steps examples
 
 on:
-  push:
+  push
 
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
-    name: Example of Custom Action
+    name: Example of custom action
     steps:
       - name: Checkout Actions
         uses: actions/checkout@v4
@@ -14,6 +14,5 @@ jobs:
         uses: "./.github/actions/hello"
         with:
           the-caller: 'Myself'
-      - name: Echo Random Number
-        run: echo random-number ${{ steps.step-caller.outputs.random-number }}
-        shell: bash
+      - run: echo random-number ${{ steps.step-caller.outputs.random-number }}
+      shell: bash
