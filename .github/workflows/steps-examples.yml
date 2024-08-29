@@ -9,15 +9,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
+
       - name: Install frontend dependencies
         run: npm --prefix frontend install
+
       - name: Build frontend
         run: npm --prefix frontend run build
+
       - name: Upload frontend build
         uses: actions/upload-artifact@v4
         with:
@@ -30,12 +34,13 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+      AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}  # Remova se não estiver usando sessões temporárias
       AWS_EC2_METADATA_DISABLED: true
       BUCKET_S3: ${{ vars.BUCKET_S3 }}
     steps:
-    - uses: actions/download-artifact@v4
-      with:
-        name: build
-        path: frontend/.next/server/app
-    - run: aws s3 cp frontend/.next/server/app s3://$BUCKET_S3--recursive --acl public-read
+      - uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: frontend/.next/server/app
+
+      - run: aws s3 cp frontend/.next/server/app s3://$BUCKET_S3 --recursive --acl public-read
